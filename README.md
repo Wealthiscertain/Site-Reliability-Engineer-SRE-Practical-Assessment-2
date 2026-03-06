@@ -32,15 +32,10 @@ sre-assessment/
 
 ## Getting Started
 
-1. Clone the repository and ensure you have access to a Kubernetes cluster with at least two nodes. The Google Online Boutique sample application should be deployed there.
-2. Follow the directories to configure and deploy components:
+1. The directories to configure and deploy components:
    - `otel-collector/` contains Helm values for deploying the OpenTelemetry Collector.
    - `instrumentation/` holds language-specific code snippets and guidance to instrument services.
    - `rum/` covers the frontend RUM agent setup.
    - `dashboards/` holds exported NDJSON objects that can be imported in Kibana.
    - `infrastructure/` includes Elastic Agent or Metricbeat configurations and alert rules.
-3. The `docs/DECISIONS.md` file records architectural choices made during implementation.
-
-## Submission
-
-Once complete, push the repository to a public Git platform and provide the link as instructed in the assessment email.
+2. The `docs/DECISIONS.md` file records architectural choices made during implementation.
