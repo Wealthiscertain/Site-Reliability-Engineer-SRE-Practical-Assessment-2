@@ -1,0 +1,14 @@
+# Metricbeat configuration for PostgreSQL module
+metricbeat.modules:
+- module: postgresql
+  metricsets: ["activity","database","bgwriter","connection","replication"]
+  period: 10s
+  hosts: ["postgres://user:password@postgres-service:5432?sslmode=disable"]
+  username: "user"
+  password: "password"
+  # add any custom settings such as slow query log path
+
+output.elasticsearch:
+  hosts: ["http://elasticsearch:9200"]
+  username: "elastic"
+  password: "changeme"

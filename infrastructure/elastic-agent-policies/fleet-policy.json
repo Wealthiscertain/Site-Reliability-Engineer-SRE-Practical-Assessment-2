@@ -1,0 +1,27 @@
+{
+  "policy": {
+    "id": "default-policy",
+    "name": "Default policy",
+    "description": "Policy with system, nginx, postgresql, and redis integrations",
+    "namespace": "default",
+    "enabled": true,
+    "package_policies": [
+      {
+        "name": "system-1",
+        "namespace": "default",
+        "package": { "name": "system", "version": "1.0.0" },
+        "inputs": [
+          { "type": "system/metrics", "enabled": true }
+        ]
+      },
+      {
+        "name": "nginx-metrics",
+        "namespace": "default",
+        "package": { "name": "nginx", "version": "1.0.0" },
+        "inputs": [
+          { "type": "nginx/metrics", "enabled": true }
+        ]
+      }
+    ]
+  }
+}

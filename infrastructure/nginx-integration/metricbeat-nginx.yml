@@ -1,0 +1,11 @@
+# Metricbeat configuration for NGINX module
+metricbeat.modules:
+- module: nginx
+  metricsets: ["stubstatus"]
+  period: 10s
+  hosts: ["http://nginx-ingress-controller:80"]
+
+output.elasticsearch:
+  hosts: ["http://elasticsearch:9200"]
+  username: "elastic"
+  password: "changeme"

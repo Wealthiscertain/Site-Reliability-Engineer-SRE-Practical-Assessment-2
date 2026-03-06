@@ -1,0 +1,72 @@
+# Helm values for the OpenTelemetry Collector gateway Deployment
+# Gateway sits behind a service and performs sampling, resource detection, and exports to Elastic APM.
+
+replicaCount: 1
+
+config: |
+  receivers:
+    otlp:
+      protocols:
+        grpc:
+        http:
+    zipkin: {}
+
+  processors:
+    batch:
+    memory_limiter:
+      check_interval: 1s
+      limit_mib: 8000
+      spike_limit_mib: 1000
+    resource:
+      attributes:
+        - key: k8s.pod.name
+          action: insert
+          from_attribute: k8s.pod.name
+        - key: k8s.namespace.name
+          action: insert
+          from_attribute: k8s.namespace.name
+        - key: k8s.deployment.name
+          action: insert
+          from_attribute: k8s.deployment.name
+        - key: service.name
+          action: insert
+          from_attribute: service.name
+    tail_sampling:
+      decision_wait: 30s
+      policies:
+        - name: "errors"
+          type: "error"
+          sampling_percentage: 100
+        - name: "random10"
+          type: "probabilistic"
+          sampling_percentage: 10
+
+  exporters:
+    otlp:
+      endpoint: "https://elastic-apm-server:8200" # APM Server OTLP intake
+      headers:
+        Authorization: "Bearer ${ELASTIC_APM_API_KEY}"
+      tls:
+        insecure: false
+
+  service:
+    pipelines:
+      traces:
+        receivers: [otlp, zipkin]
+        processors: [batch, memory_limiter, resource, tail_sampling]
+        exporters: [otlp]
+      metrics:
+        receivers: [otlp]
+        processors: [batch, memory_limiter, resource]
+        exporters: [otlp]
+      logs:
+        receivers: [otlp]
+        processors: [batch, memory_limiter, resource]
+        exporters: [otlp]
+
+# Flags for health and zpages
+telemetry:
+  metrics:
+    address: ":8888"
+  logs:
+    level: "info"

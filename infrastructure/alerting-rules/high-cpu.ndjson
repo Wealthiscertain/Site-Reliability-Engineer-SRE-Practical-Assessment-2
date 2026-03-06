@@ -1,0 +1,1 @@
+{"rule_id":"high-cpu","interval":"1m","type":"metrics.alert","name":"High CPU Usage","enabled":true,"params":{"index":"metrics-*","timeField":"@timestamp","criteria":[{"aggregation":"avg","metric":"system.cpu.total.pct","comparator":">","value":0.85,"groupBy":[]}]}}

@@ -1,0 +1,13 @@
+# Metricbeat configuration for Redis module
+metricbeat.modules:
+- module: redis
+  metricsets: ["info","keyspace"]
+  period: 10s
+  hosts: ["redis://redis-service:6379"]
+  username: ""
+  password: ""
+
+output.elasticsearch:
+  hosts: ["http://elasticsearch:9200"]
+  username: "elastic"
+  password: "changeme"

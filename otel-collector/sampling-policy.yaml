@@ -1,0 +1,10 @@
+# Tail-based sampling policy documentation and example
+# This file is referenced by the gateway values and shows reasoning for sampling choices.
+
+# - Always sample error spans (100%) so that issues are fully captured.
+# - Sample 10% of successful requests to reduce volume yet maintain coverage for latency trends.
+
+# The config used by the gateway is already defined in values-gateway.yaml under the
+# "tail_sampling" processor.
+
+# To override or extend policies, edit the gateway values file or provide additional YAML here.

@@ -1,0 +1,12 @@
+# Business Transaction Monitoring dashboard (example)
+[
+  {
+    "type": "dashboard",
+    "id": "business-transactions",
+    "attributes": {
+      "title": "Business Transaction Monitoring",
+      "panelsJSON": "[{\"version\":1,\"type\":\"lens\",\"gridData\":{\"x\":0,\"y\":0,\"w\":24,\"h\":15},\"panelIndex\":\"1\",\"embeddableConfig\":{},\"id\":\"\"}]",
+      "optionsJSON": "{\"useMargins\":true}"
+    }
+  }
+]

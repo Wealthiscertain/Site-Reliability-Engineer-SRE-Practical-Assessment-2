@@ -1,0 +1,1 @@
+{"rule_id":"disk-space-critical","interval":"5m","type":"metrics.alert","name":"Disk Space Critical","enabled":true,"params":{"index":"metrics-*","timeField":"@timestamp","criteria":[{"aggregation":"avg","metric":"system.filesystem.used.pct","comparator":">","value":0.90,"groupBy":[]}],"filterQuery":"process.name: *"}}

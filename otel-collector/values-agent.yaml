@@ -1,0 +1,67 @@
+# Helm values for the OpenTelemetry Collector agent DaemonSet
+# This file configures the collector running as a DaemonSet on each node.
+# Agents collect hostmetrics and forward to the gateway. Adjust resource limits as needed.
+
+replicaCount: 1
+
+config: |
+  receivers:
+    otlp:
+      protocols:
+        grpc:
+        http:
+    hostmetrics:
+      collection_interval: 60s
+      scrapers:
+        cpu: {}
+        memory: {}
+        filesystem: {}
+        load: {}
+        network: {}
+        disk: {}
+    zipkin: {}
+
+  processors:
+    batch:
+    memory_limiter:
+      check_interval: 1s
+      limit_mib: 4000
+      spike_limit_mib: 500
+    resource:
+      attributes:
+        - key: k8s.pod.name
+          action: insert
+          from_attribute: k8s.pod.name
+        - key: k8s.namespace.name
+          action: insert
+          from_attribute: k8s.namespace.name
+        - key: k8s.deployment.name
+          action: insert
+          from_attribute: k8s.deployment.name
+        - key: service.name
+          action: insert
+          from_attribute: service.name
+
+  exporters:
+    otlp:
+      endpoint: "{{ .Values.gatewayService }}:4317" # forwarded to gateway via service
+      tls:
+        insecure: false
+
+  service:
+    pipelines:
+      traces:
+        receivers: [otlp, zipkin]
+        processors: [resource, batch]
+        exporters: [otlp]
+      metrics:
+        receivers: [otlp, hostmetrics]
+        processors: [resource, batch]
+        exporters: [otlp]
+      logs:
+        receivers: [otlp]
+        processors: [resource, batch]
+        exporters: [otlp]
+
+# environment variable to locate gateway service within cluster
+gatewayService: "otel-gateway.otlp.svc.cluster.local"

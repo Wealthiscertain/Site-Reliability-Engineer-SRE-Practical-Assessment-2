@@ -1,0 +1,1 @@
+{"rule_id":"memory-pressure","interval":"1m","type":"metrics.alert","name":"Memory Pressure","enabled":true,"params":{"index":"metrics-*","timeField":"@timestamp","criteria":[{"aggregation":"avg","metric":"system.memory.actual.used.pct","comparator":">","value":0.90,"groupBy":[]}],"filterQuery":"host.os.type: linux"}}

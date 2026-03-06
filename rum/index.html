@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Online Boutique Frontend with RUM</title>
+  <script src="https://unpkg.com/@elastic/apm-rum@5/dist/bundles/elastic-apm-rum.umd.min.js"></script>
+  <script>
+    // initialize Elastic APM RUM agent
+    var apm = elasticApm.init({
+      serviceName: 'frontend',
+      serverUrl: 'https://elastic-apm-server:8200',
+      environment: 'production',
+      captureBody: 'all',
+      distributedTracingOrigins: ['*'],
+      useElasticHeader: false
+    });
+
+    // add custom context
+    apm.addLabels({
+      sessionId: 'abc123',
+      userAgentType: navigator.userAgent.indexOf('Mobile') > -1 ? 'mobile' : 'desktop'
+    });
+
+    // manual instrumentation example
+    function addToCart() {
+      var transaction = apm.startTransaction('add-to-cart', 'user-action');
+      fetch('/cart', { headers: apm.getTraceParentHeader() })
+        .then(resp => resp.text())
+        .then(text => {
+          transaction.end();
+        });
+    }
+  </script>
+</head>
+<body>
+  <h1>Online Boutique</h1>
+  <button onclick="addToCart()">Add to Cart</button>
+</body>
+</html>
